@@ -1,15 +1,35 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"server/user"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
+
+func Init() *gorm.DB {
+	dsn := "host=localhost port=5432 user=postgres password=admin dbname=postgres"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return db
+}
 
 func main() {
 	app := gin.Default()
-	userService := user.UserService{}
+	db := Init()
+	userRepository := &user.UserRepository{
+		Db: *db,
+	}
+	userService := user.UserService{
+		UserRepository: userRepository,
+	}
 	app.GET("/isLive", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello From Go",

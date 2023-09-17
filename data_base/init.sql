@@ -7,8 +7,8 @@ CREATE TABLE "public".document_type (
   CONSTRAINT unq_document_type UNIQUE (name)
 );
 CREATE TABLE "public"."user" (
-  internal_id bigint DEFAULT nextval('user_internal_id_seq'::regclass) NOT NULL,
-  id uuid DEFAULT gen_random_uuid(),
+  internal_id bigserial NOT NULL,
+  id uuid DEFAULT uuid_generate_v4(),
   name varchar(255) NOT NULL,
   document_type smallint NOT NULL,
   email varchar(255) NOT NULL,

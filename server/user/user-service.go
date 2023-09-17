@@ -1,6 +1,10 @@
 package user
 
-type UserService struct{}
+import "fmt"
+
+type UserService struct {
+	UserRepository IUserRepository
+}
 
 type IUserService interface {
 	CreateUser(CreateUser) CreateUser
@@ -13,7 +17,8 @@ func (u *UserService) CreateUser(user *CreateUser) CreatedUser {
 		DocumentNumber: user.DocumentNumber,
 		DocumentType:   user.DocumentType,
 		Email:          user.Email,
-		Password:       user.Password,
 	}
+	u.UserRepository.createUser(*user)
+	fmt.Println(returnValue.getInternalId())
 	return returnValue
 }
