@@ -1,11 +1,13 @@
 package user
 
 import (
+	"fmt"
+
 	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	Db gorm.DB
+	Db *gorm.DB
 }
 
 type IUserRepository interface {
@@ -13,15 +15,17 @@ type IUserRepository interface {
 }
 
 func (u *UserRepository) createUser(user CreateUser) (externalId *string, err *error) {
-	createdUser := u.Db.Create(&CreatedUser{
+	fmt.Println("UserRepository memory address => %s", &u)
+	fmt.Println("Db memory address => %s", &u.Db)
+	userToBeCreated := CreatedUser{
 		Name:           user.Name,
 		DocumentNumber: user.DocumentNumber,
 		DocumentType:   user.DocumentType,
 		Email:          user.Email,
-	})
+	}
+	createdUser := u.Db.Create(&userToBeCreated)
 	if createdUser.Error != nil {
 		return nil, &createdUser.Error
 	}
-	returnValue := "created"
-	return &returnValue, nil
+	return &userToBeCreated.Id, nil
 }

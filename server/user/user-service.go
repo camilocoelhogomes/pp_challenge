@@ -7,18 +7,20 @@ type UserService struct {
 }
 
 type IUserService interface {
-	CreateUser(CreateUser) CreateUser
+	CreateUser(user CreateUser) CreateUser
 }
 
 func (u *UserService) CreateUser(user *CreateUser) CreatedUser {
+	fmt.Println("userService memory address => %s", &u)
 	returnValue := CreatedUser{
-		Id:             "1",
 		Name:           user.Name,
 		DocumentNumber: user.DocumentNumber,
 		DocumentType:   user.DocumentType,
 		Email:          user.Email,
 	}
-	u.UserRepository.createUser(*user)
+	result, _ := u.UserRepository.createUser(*user)
+
+	returnValue.Id = *result
 	fmt.Println(returnValue.getInternalId())
 	return returnValue
 }

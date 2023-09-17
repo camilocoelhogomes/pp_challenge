@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"server/user"
@@ -25,11 +26,14 @@ func main() {
 	app := gin.Default()
 	db := Init()
 	userRepository := &user.UserRepository{
-		Db: *db,
+		Db: db,
 	}
 	userService := user.UserService{
 		UserRepository: userRepository,
 	}
+	fmt.Println("db memory address => %s", &db)
+	fmt.Println("userRepository memory address => %s", &userRepository)
+	fmt.Println("userService memory address => %s", &userService)
 	app.GET("/isLive", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello From Go",
