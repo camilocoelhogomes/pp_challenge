@@ -1,39 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
-	"server/user"
+	"server/database"
+	dtos "server/dtos/user"
+	"server/repository"
+	service "server/service/user"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
-
-func Init() *gorm.DB {
-	dsn := "host=localhost port=5432 user=postgres password=admin dbname=postgres"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return db
-}
 
 func main() {
 	app := gin.Default()
-	db := Init()
-	userRepository := &user.UserRepository{
-		Db: db,
-	}
-	userService := user.UserService{
+	dbFacotry := database.DatabaseFacotory{}
+	db := dbFacotry.GetDataBase()
+	userRepositoryFactory := &repository.UserRepositoryFactory{}
+	userRepository := userRepositoryFactory.CreateUserRespotirory(db)
+	userService := service.UserService{
 		UserRepository: userRepository,
 	}
-	fmt.Println("db memory address => %s", &db)
-	fmt.Println("userRepository memory address => %s", &userRepository)
-	fmt.Println("userService memory address => %s", &userService)
+
 	app.GET("/isLive", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello From Go",
@@ -41,7 +27,7 @@ func main() {
 	})
 
 	app.POST("/user", func(ctx *gin.Context) {
-		var body user.CreateUser
+		var body dtos.CreateUser
 
 		if err := ctx.ShouldBindJSON(&body); err != nil {
 			ctx.Error(err)
