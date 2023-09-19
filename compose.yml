@@ -1,0 +1,16 @@
+volumes:
+  postgres_db:
+
+networks:
+  backend:
+
+services:
+  postgres_db:
+    build: "./data_base"
+    volumes: 
+      - postgres_db:/data/db
+    restart: always
+    ports: 
+      - "5432:5432"
+    networks:
+      - backend
