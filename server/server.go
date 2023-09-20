@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 	"server/database"
-	dtos "server/dtos/user"
+	"server/dtos"
 	"server/repository"
-	service "server/service/user"
+	"server/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,10 +15,9 @@ func main() {
 	dbFacotry := database.DatabaseFacotory{}
 	db := dbFacotry.GetDataBase()
 	userRepositoryFactory := &repository.UserRepositoryFactory{}
+	userServiceFactory := &service.ServiceUserFactory{}
 	userRepository := userRepositoryFactory.CreateUserRespotirory(db)
-	userService := service.UserService{
-		UserRepository: userRepository,
-	}
+	userService := userServiceFactory.GetUserService(userRepository)
 
 	app.GET("/isLive", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -35,7 +34,7 @@ func main() {
 			return
 		}
 
-		returnValue := userService.CreateUser(&body)
+		returnValue := userService.CreateUser(body)
 
 		ctx.JSON(http.StatusOK, returnValue)
 

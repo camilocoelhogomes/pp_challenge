@@ -1,6 +1,6 @@
 package interfaces
 
-import dtos "server/dtos/user"
+import "server/dtos"
 
 type IUserRepository interface {
 	CreateUser(user dtos.CreateUser) (externalId *string, err *error)

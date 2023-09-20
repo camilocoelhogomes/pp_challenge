@@ -2,15 +2,15 @@ package service
 
 import (
 	"fmt"
-	dtos "server/dtos/user"
+	"server/dtos"
 	"server/interfaces"
 )
 
-type UserService struct {
+type userService struct {
 	UserRepository interfaces.IUserRepository
 }
 
-func (u *UserService) CreateUser(user *dtos.CreateUser) dtos.CreatedUser {
+func (u *userService) CreateUser(user dtos.CreateUser) dtos.CreatedUser {
 	fmt.Println("userService memory address => %s", &u)
 	returnValue := dtos.CreatedUser{
 		Name:           user.Name,
@@ -18,7 +18,7 @@ func (u *UserService) CreateUser(user *dtos.CreateUser) dtos.CreatedUser {
 		DocumentType:   user.DocumentType,
 		Email:          user.Email,
 	}
-	result, _ := u.UserRepository.CreateUser(*user)
+	result, _ := u.UserRepository.CreateUser(user)
 	returnValue.Id = *result
 
 	return returnValue

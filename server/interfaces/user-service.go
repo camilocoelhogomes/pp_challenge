@@ -1,6 +1,6 @@
-package service
+package interfaces
 
-import dtos "server/dtos/user"
+import "server/dtos"
 
 type IUserService interface {
 	CreateUser(user dtos.CreateUser) dtos.CreatedUser

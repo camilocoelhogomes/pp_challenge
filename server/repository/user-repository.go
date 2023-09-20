@@ -1,7 +1,7 @@
 package repository
 
 import (
-	dtos "server/dtos/user"
+	"server/dtos"
 
 	"gorm.io/gorm"
 )
