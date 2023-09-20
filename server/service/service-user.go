@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"server/dtos"
 	"server/interfaces"
 )
@@ -11,7 +10,6 @@ type userService struct {
 }
 
 func (u *userService) CreateUser(user dtos.CreateUser) dtos.CreatedUser {
-	fmt.Println("userService memory address => %s", &u)
 	returnValue := dtos.CreatedUser{
 		Name:           user.Name,
 		DocumentNumber: user.DocumentNumber,
